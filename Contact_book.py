@@ -1,15 +1,6 @@
 contact = {}
 contact_file = "contact.txt"
 
-def load_contact():
-    try:
-        with open (contact_file,"a") as file :
-            for line in file:
-                name,phone = line.strip().split(",")
-                contact[name] = phone 
-    except FileNotFoundError:
-        pass
-
 def save_contacts():
     with open(contact_file, "w") as file:
         for name, phone in contact.items():
@@ -21,6 +12,21 @@ def add_contact():
     contact[name] = phone 
     print("Contact added")
 
+def delete_contact():
+    name = input("Enter name to delete: ")
+    if name in contact:
+        del contact[name]
+        save_contacts()
+        print("🗑 Contact deleted")
+    else:
+        print("❌ Contact not found")
+
+def search_contact():
+    name = input("Enter name to search: ")
+    if name in contact:
+        print(f"{name} : {contact[name]}")
+    else:
+        print(" Contact not found")
 
 def view_contact():
     if not contact:
