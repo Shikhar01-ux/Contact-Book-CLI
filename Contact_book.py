@@ -1,10 +1,26 @@
 contact = {}
+contact_file = "contact.txt"
+
+def load_contact():
+    try:
+        with open (contact_file,"a") as file :
+            for line in file:
+                name,phone = line.strip().split(",")
+                contact[name] = phone 
+    except FileNotFoundError:
+        pass
+
+def save_contacts():
+    with open(contact_file, "w") as file:
+        for name, phone in contact.items():
+            file.write(f"{name},{phone}\n")
 
 def add_contact():
     name = input("Enter contact name: ")
     phone = input("Enter contact number: ")
     contact[name] = phone 
     print("Contact added")
+
 
 def view_contact():
     if not contact:
@@ -23,6 +39,7 @@ while True:
     choice = int(input("Enter your choice: "))
     if choice == 1:
         add_contact()
+
     elif choice == 2:
         view_contact()
     elif choice == 3:
