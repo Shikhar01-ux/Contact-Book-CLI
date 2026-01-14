@@ -1,56 +1,83 @@
-contact = {}
-contact_file = "contact.txt"
+FILE_NAME = "contacts.txt"
+contacts = {}
 
+# Load contacts from file
+def load_contacts():
+    try:
+        with open(FILE_NAME, "r") as file:
+            for line in file:
+                name, phone = line.strip().split(",")
+                contacts[name] = phone
+    except FileNotFoundError:
+        pass
+
+# Save contacts to file
 def save_contacts():
-    with open(contact_file, "w") as file:
-        for name, phone in contact.items():
+    with open(FILE_NAME, "w") as file:
+        for name, phone in contacts.items():
             file.write(f"{name},{phone}\n")
 
 def add_contact():
-    name = input("Enter contact name: ")
-    phone = input("Enter contact number: ")
-    contact[name] = phone 
-    print("Contact added")
+    name = input("Enter name: ")
+    if name in contacts:
+        print("Contact already exists")
+        return
+
+    phone = input("Enter phone number: ")
+    contacts[name] = phone
+    save_contacts()
+    print("Contact saved")
+
+def view_contacts():
+    if not contacts:
+        print("No contacts found")
+        return
+
+    print("\nContact List")
+    for name, phone in contacts.items():
+        print(f"{name} : {phone}")
 
 def delete_contact():
     name = input("Enter name to delete: ")
-    if name in contact:
-        del contact[name]
+    if name in contacts:
+        del contacts[name]
         save_contacts()
-        print("🗑 Contact deleted")
+        print("Contact deleted")
     else:
-        print("❌ Contact not found")
+        print("Contact not found")
 
 def search_contact():
     name = input("Enter name to search: ")
-    if name in contact:
-        print(f"{name} : {contact[name]}")
+    if name in contacts:
+        print(f"{name} : {contacts[name]}")
     else:
-        print(" Contact not found")
+        print("Contact not found")
 
-def view_contact():
-    if not contact:
-        print ("No contact found")
-        return
-    print("\n Contact list")
-    for name,phone in contact.items():
-        print(f"{name} : {phone}")
+def menu():
+    load_contacts()
 
-while True:
-    print("\n----Contact Book----")
-    print("1. Add contact")
-    print("2. View contact")
-    print("3. Exit")
+    while True:
+        print("\nContact Book")
+        print("1. Add Contact")
+        print("2. View Contacts")
+        print("3. Search Contact")
+        print("4. Delete Contact")
+        print("5. Exit")
 
-    choice = int(input("Enter your choice: "))
-    if choice == 1:
-        add_contact()
+        choice = input("Choose an option: ")
 
-    elif choice == 2:
-        view_contact()
-    elif choice == 3:
-        print("Exiting contact book. Bye Bye")
-        break
-    else:
-        print("Invalid choice")
-        
+        if choice == "1":
+            add_contact()
+        elif choice == "2":
+            view_contacts()
+        elif choice == "3":
+            search_contact()
+        elif choice == "4":
+            delete_contact()
+        elif choice == "5":
+            print("Goodbye")
+            break
+        else:
+            print("Invalid choice")
+
+menu()
